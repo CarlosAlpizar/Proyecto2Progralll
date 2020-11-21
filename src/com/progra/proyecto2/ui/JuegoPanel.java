@@ -46,16 +46,13 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
     //entorno
     private Image mapa = null;
 
-    /*  Image image4 = null;
-    Image image5 = null;
-    Image image6 = null;
-    Image image7 = null;
-    Image image8 = null;*/
-    // entorno
     Jugador jugador = null;
     private SpriteSheet spriteSheet;
 
     Enemigo enemigo = null;
+    Enemigo enemigo2 = null;
+    Enemigo enemigo3 = null;
+    Enemigo enemigo4 = null;
 
     ColisionDetection colisionDetectionObs = null;
     ColisionDetection colisionDetection1 = null;
@@ -63,6 +60,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
     ColisionDetection colisionDetection3 = null;
     ColisionDetection colisionDetection4 = null;
     BufferedImage currentPlayerSprite;
+    BufferedImage currentEnemigoSprite;
     private boolean obstacle = false;
 
     public JuegoPanel(String flag) {
@@ -79,13 +77,11 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
             borde3 = ImageIO.read(Panel.class.getResource("/com/progra/proyecto2/resources/borde2.png"));
             borde4 = ImageIO.read(Panel.class.getResource("/com/progra/proyecto2/resources/borde2.png"));
 
-//estas nos permiten usar los tanques del sprite
             BufferedImage sheet = ImageIO.read(Panel.class.getResource("/com/progra/proyecto2/resources/tanks.png"));
             spriteSheet = new SpriteSheetBuilder()
-                    .withSheet(sheet)//con estos datos se escoge que imagen se quiere usar segun su coordenada en la matriz
+                    .withSheet(sheet)
                     .withColumns(8)
                     .withRows(8)
-                    //  .withSpriteSize(40, 34)
                     .withSpriteCount(64).
                     build();
             jugador = new Jugador(400, 300);
@@ -98,8 +94,17 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
             this.setImage("/com/progra/proyecto2/resources/mapa.jpg");
 
             enemigo = new Enemigo(10, 500, spriteSheet);
+            enemigo2 = new Enemigo(100, 50, spriteSheet);
+            enemigo3 = new Enemigo(10, 450, spriteSheet);
+            enemigo4 = new Enemigo(300, 300, spriteSheet);
             Thread hilo = new Thread(enemigo);
+            Thread hilo2 = new Thread(enemigo2);
+            Thread hilo3 = new Thread(enemigo3);
+            Thread hilo4 = new Thread(enemigo4);
             hilo.start();
+            hilo2.start();
+            hilo3.start();
+            hilo4.start();
 
         } catch (IOException ex) {
             Logger.getLogger(JuegoPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,12 +119,6 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         this.dibujarObstaculo(g, 250, 200);
         this.dibujarentorno(g, 0, 0);
 
-        //pinta el tanque naranja
-        BufferedImage sprite = spriteSheet.getSprite(1);
-        int x = (getWidth() - sprite.getWidth()) / 2;
-        int y = (getHeight() - sprite.getHeight()) / 2;
-        g.drawImage(sprite, x, y, this);
-
         Rectangle ima1 = colisionDetectionObs.crearRectangle(obstaculo, 250, 200);
         colisionDetectionObs.setImagen1Bounds(ima1);
         g.setColor(Color.red);
@@ -129,7 +128,6 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         colisionDetectionObs.setImagen2Bounds(ima2);
         g.setColor(Color.red);
         g.drawRect(ima2.x, ima2.y, ima2.width, ima2.height);
-////////////////////
 
         Rectangle imaborde1 = colisionDetection1.crearRectangle(borde1, 0, 0);
         colisionDetection1.setImagen1Bounds(imaborde1);
@@ -141,7 +139,6 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         g.setColor(Color.red);
         g.drawRect(imaSpr.x, imaSpr.y, imaSpr.width, imaSpr.height);
 
-        //////////////////////////////////////////////////////////
         Rectangle imaborde2 = colisionDetection2.crearRectangle(borde2, 0, 530);
         colisionDetection2.setImagen1Bounds(imaborde2);
         g.setColor(Color.red);
@@ -152,7 +149,6 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         g.setColor(Color.red);
         g.drawRect(imaSpr2.x, imaSpr2.y, imaSpr2.width, imaSpr2.height);
 
-        ///////////////////////////
         Rectangle imaborde3 = colisionDetection3.crearRectangle(borde3, 0, 0);
         colisionDetection3.setImagen1Bounds(imaborde3);
         g.setColor(Color.red);
@@ -162,7 +158,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         colisionDetection3.setImagen2Bounds(imaSpr3);
         g.setColor(Color.red);
         g.drawRect(imaSpr3.x, imaSpr3.y, imaSpr3.width, imaSpr3.height);
-
+//////////////////////////
         Rectangle imaborde4 = colisionDetection4.crearRectangle(borde4, 575, 0);
         colisionDetection4.setImagen1Bounds(imaborde4);
         g.setColor(Color.red);
@@ -172,28 +168,48 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         colisionDetection4.setImagen2Bounds(imaSpr4);
         g.setColor(Color.red);
         g.drawRect(imaSpr4.x, imaSpr4.y, imaSpr4.width, imaSpr4.height);
-        ///////////////////////////////////////////////
-        if (colisionDetectionObs.detecCollision() != null) {
+
+        boolean aux;
+        if (enemigo.getReg().intersects(imaborde4)) {
+            aux = true;
+            enemigo.setAux(aux);
+        } else if (enemigo.getReg().intersects(imaborde3)) {
+            aux = true;
+            enemigo.setAux(aux);
+        } else if (enemigo.getReg().intersects(imaborde2)) {
+            aux = true;
+            enemigo.setAux(aux);
+        } else if (enemigo.getReg().intersects(imaborde1)) {
+            aux = true;
+            enemigo.setAux(aux);
+        } else {
+            aux = false;
+            enemigo.setAux(aux);
+        }
+
+        if (colisionDetectionObs.detecCollision() != null /*|| aux == true*/) {
             obstacle = true;
             System.out.println("choco!!");
-        } else if (colisionDetection1.detecCollision() != null) {
+        } else if (colisionDetection1.detecCollision() != null /*|| aux == true*/) {
             obstacle = true;
             System.out.println("choco!!");
-        } else if (colisionDetection2.detecCollision() != null) {
+        } else if (colisionDetection2.detecCollision() != null /*|| aux == true*/) {
             obstacle = true;
             System.out.println("choco!!");
-        } else if (colisionDetection3.detecCollision() != null) {
+        } else if (colisionDetection3.detecCollision() != null /*|| aux == true*/) {
             obstacle = true;
             System.out.println("choco!!");
-        } else if (colisionDetection4.detecCollision() != null) {
+        } else if (colisionDetection4.detecCollision() != null /*|| aux == true*/) {
             obstacle = true;
             System.out.println("choco!!");
         } else {
             obstacle = false;
         }
 
-        /////////////////////////////////////////////////////////////
         enemigo.pintar(g);
+        //enemigo2.pintar(g);
+        //enemigo3.pintar(g);
+        //enemigo4.pintar(g);
     }
 
     public void dibujarTanqueJugadorSprite(Graphics g, int x, int y, String direction, int[] pos) {
@@ -218,6 +234,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                 break;
         }
         currentPlayerSprite = sprite;
+        currentEnemigoSprite = sprite;
     }
 
     public void dibujarentorno(Graphics g, int x, int y) {
