@@ -126,8 +126,8 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         this.dibujarBorde2(g, 0, 530);
         this.dibujarBorde3(g, 0, 0);
         this.dibujarBorde4(g, 575, 0);
-        this.dibujarentorno(g, 0, 0);
-        this.dibujarEnemigo(g, enemigo.getX(), enemigo.getY(), enemigo.getDirection(), new int[]{1, 8, 10, 3});
+
+        this.dibujarEnemigo(g, enemigo.getX(), enemigo.getY(), enemigo.getDirection(), new int[]{10, 8, 1, 3});
 
         //tanque con roca--
         Rectangle ima1 = colisionDetectionObs.crearRectangle(obstaculo, 250, 200);
@@ -180,7 +180,9 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         colisionDetection4.setImagen2Bounds(imaSpr4);
         g.setColor(Color.red);
         g.drawRect(imaSpr4.x, imaSpr4.y, imaSpr4.width, imaSpr4.height);
-
+/////////////////////////////////////////
+///////////////////////////////////////////
+//////////////////////////////////////////////////
 ////////////////enemigo con roca---///////////////////////////////////////////////////
         Rectangle ima = colisionDetectionObs2.crearRectangle(obstaculo, 250, 200);
         colisionDetectionObs2.setImagen1Bounds(ima);
@@ -221,7 +223,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         colisionDetectionB3.setImagen2Bounds(imaEnemigoB3);
         g.setColor(Color.red);
         g.drawRect(imaEnemigoB3.x, imaEnemigoB3.y, imaEnemigoB3.width, imaEnemigoB3.height);
-////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
         Rectangle regBor4 = colisionDetectionB4.crearRectangle(borde4, 575, 0);
         colisionDetectionB4.setImagen1Bounds(regBor4);
         g.setColor(Color.red);
@@ -264,6 +266,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
 
         } else {
             obstacle = false;
+            obstacle2 = false;
         }
 
     }
@@ -326,10 +329,9 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     g.drawImage(sprite, x, y, this);
                 } else {
                     enemigo.setDirection("Sur");
-                    enemigo.setY(y = y + 5);
-                    sprite = spriteSheet.getSprite(pos[0]);
+                    enemigo.setY(y = y - 15);
+                    sprite = spriteSheet.getSprite(pos[2]);
                     g.drawImage(sprite, x, y, this);
-                    enemigo.mover();
 
                 }
                 break;
@@ -340,10 +342,9 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     g.drawImage(sprite, x, y, this);
                 } else {
                     enemigo.setDirection("Este");
-                    enemigo.setX(x = x + 5);
-                    sprite = spriteSheet.getSprite(pos[1]);
+                    enemigo.setX(x = x + 15);
+                    sprite = spriteSheet.getSprite(pos[3]);
                     g.drawImage(sprite, x, y, this);
-                    enemigo.mover();
 
                 }
                 break;
@@ -354,10 +355,9 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     g.drawImage(sprite, x, y, this);
                 } else {
                     enemigo.setDirection("Norte");
-                    enemigo.setY(y = y - 5);
-                    sprite = spriteSheet.getSprite(pos[2]);
+                    enemigo.setY(y = y + 15);
+                    sprite = spriteSheet.getSprite(pos[1]);
                     g.drawImage(sprite, x, y, this);
-                    enemigo.mover();
 
                 }
                 break;
@@ -368,10 +368,9 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     g.drawImage(sprite, x, y, this);
                 } else {
                     enemigo.setDirection("Oeste");
-                    enemigo.setX(x = x - 5);
-                    sprite = spriteSheet.getSprite(pos[3]);
+                    enemigo.setX(x = x - 15);
+                    sprite = spriteSheet.getSprite(pos[1]);
                     g.drawImage(sprite, x, y, this);
-                    enemigo.mover();
 
                 }
                 break;
@@ -388,7 +387,6 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                 jugador.moveUp();
             } else if (jugador.getDirection().equals("Norte")) {
                 jugador.moveDown();
-
             }
         }
         if (k.getKeyCode() == KeyEvent.VK_LEFT) {
