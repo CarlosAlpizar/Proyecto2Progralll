@@ -47,7 +47,7 @@ public class Enemigo extends Tanque implements Runnable {
     int x, y;
     SpriteSheet sprite;
     BufferedImage imagen = null;
-    int pasos = 10;
+    int pasos = 20;
     private Rectangle reg = null;
 
     public Enemigo(int x, int y, SpriteSheet sprite) {
@@ -74,15 +74,14 @@ public class Enemigo extends Tanque implements Runnable {
             if (pasos == 0) {
                 select = random.nextInt(direccionSet.length);
                 this.direccion = direccionSet[select];
-                pasos = 10;
+                pasos = 20;
             }
             if (this.getIsLive() == false) {
                 break;
 
             }
-            if (aux != true) {
-                mover();
-            }
+
+            mover();
 
         }
     }
@@ -91,51 +90,42 @@ public class Enemigo extends Tanque implements Runnable {
 
         switch (direccion) {
             case "Norte":
-                //if (aux == true) {
-                y = y + -10;
-                pasos--;
-                imagen = sprite.getSprite(1);
-                reg.setBounds(x, y, 32, 32);
-                // } else {
-                //  System.out.println("no se debe mover");
-                //}
-                break;
-            /*case "Oeste":
-                if (aux == true) {
-                    x = x - 10;
-                    imagen = sprite.getSprite(8);
+                if (pasos != 0) {
+                    y = y + 5;
                     pasos--;
-                    reg.setBounds(x, y, 32, 32);
-                } else {
-                    System.out.println("no se debe mover");
+                    this.setX(x);
+                    this.setY(y);
+
+                }
+
+                break;
+            case "Oeste":
+                if (pasos != 0) {
+                    x = x - 5;
+                    pasos--;
+                    this.setX(x);
+                    this.setY(y);
                 }
                 break;
             case "Sur":
-                if (aux == true) {
-                    y = y + -10;
-                    imagen = sprite.getSprite(10);
+                if (pasos != 0) {
+                    y = y + -5;
                     pasos--;
-                    reg.setBounds(x, y, 32, 32);
-                } else {
-                    System.out.println("no se debe mover");
+                    this.setX(x);
+                    this.setY(y);
                 }
+
                 break;
             case "Este":
-                if (aux == true) {
-                    x = x + 10;
-                    imagen = sprite.getSprite(3);
+                if (pasos != 0) {
+                    x = x + 5;
                     pasos--;
-                    reg.setBounds(x, y, 32, 32);
-                } else {
-                    System.out.println("no se debe mover");
+                    this.setX(x);
+                    this.setY(y);
                 }
                 break;
-             */
-        }
-    }
 
-    public void pintar(Graphics g) {
-        g.drawImage(imagen, x, y, 32, 32, null);
+        }
     }
 
 }
