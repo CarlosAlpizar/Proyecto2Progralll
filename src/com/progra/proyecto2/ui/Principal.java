@@ -12,9 +12,18 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Principal implements ActionListener {
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     JFrame jf;
     PanelInicio sp = null;
@@ -25,6 +34,7 @@ public class Principal implements ActionListener {
     JMenuItem jmt1;
     JMenuItem jmt2;
     JMenuBar jmb;
+    private String user;
 
     public Principal() {
 
@@ -76,6 +86,8 @@ public class Principal implements ActionListener {
         // TODO Auto-generated method stub
 
         if (a.getActionCommand().equals("Nuevo")) {
+            user = JOptionPane.showInputDialog("Digite el nombre del jugador");
+            ranking.setNombre(user);
 
             Thread juegoPanelThread = new Thread(juegoPanel);
             juegoPanelThread.start();
@@ -95,6 +107,7 @@ public class Principal implements ActionListener {
             jf.remove(juegoPanel);
             jf.add(ranking);
             jf.addKeyListener(ranking);
+            ranking.GenerarTabla();
             jf.setVisible(true);
 
         }

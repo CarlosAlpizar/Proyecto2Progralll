@@ -102,9 +102,9 @@ public class Enemigo extends Tanque implements Runnable {
             return true;
         } else if (reg.y <= 0) {
             return true;
-        } else if ((reg.y + 32) > 530) {
+        } else if ((reg.y + 32) > 540) {
             return true;
-        } else if ((reg.x + 32) > 485) {
+        } else if ((reg.x + 32) > 570) {
             return true;
         }
         return false;

@@ -5,32 +5,14 @@ import java.util.Vector;
 
 public class Jugador extends Tanque {
 
-    /**
-     * @return the reg
-     */
-    public Rectangle getReg() {
-        return reg;
-    }
-
-    /**
-     * @param reg the reg to set
-     */
-    public void setReg(Rectangle reg) {
-        this.reg = reg;
-    }
-    //to save how many alive bullets shoot by player
-
     private Vector<Bala> balasJugador = new Vector<Bala>();
     Bala balaJugador = null;
-    private Rectangle reg;
 
     public Jugador(int x, int y) {
         super(x, y);
 
-        reg = new Rectangle(x, y, 32, 32);
     }
 
-    //these function will move player tank in direction on speed
     public void moveUp() {
         y -= speed;
 
@@ -48,10 +30,43 @@ public class Jugador extends Tanque {
         x += speed;
     }
 
-    //shoot the bullets
-    public void shoot() {
-        if (this.getIsLive()) {
+    public void shoot(int x, int y, String direccion) {
 
+        balaJugador = new Bala(x, y, direccion);
+        balasJugador.add(balaJugador);
+
+        switch (direccion) {
+            case "Norte":
+                y = y + 5;
+                this.setX(x);
+                this.setY(y);
+
+                break;
+
+            case "Oeste":
+
+                x = x - 5;
+
+                this.setX(x);
+                this.setY(y);
+
+                break;
+
+            case "Sur":
+
+                y = y + -5;
+
+                this.setX(x);
+                this.setY(y);
+                break;
+
+            case "Este":
+
+                x = x + 5;
+                this.setX(x);
+                this.setY(y);
+
+                break;
         }
     }
 
