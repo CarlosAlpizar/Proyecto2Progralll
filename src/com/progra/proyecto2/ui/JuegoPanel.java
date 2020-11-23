@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -33,6 +34,9 @@ import javax.swing.JPanel;
  * @author Dario
  */
 public class JuegoPanel extends JPanel implements KeyListener, Runnable {
+
+    LinkedList<Enemigo> enemigos = null;
+    ColisionDetection colision = null;
 
     Image image1 = null;
     Image image2 = null;
@@ -114,21 +118,44 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         } catch (IOException ex) {
             Logger.getLogger(JuegoPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        enemigos = new LinkedList<>();
+        colision = new ColisionDetection();
+
+        enemigos.add(new Enemigo(70, 70, spriteSheet));
+        enemigos.add(new Enemigo(80, 100, spriteSheet));
+        enemigos.add(new Enemigo(100, 400, spriteSheet));
+        enemigos.add(new Enemigo(300, 300, spriteSheet));
+        enemigos.add(new Enemigo(400, 400, spriteSheet));
+        enemigos.add(new Enemigo(50, 50, spriteSheet));
+        enemigos.add(new Enemigo(65, 350, spriteSheet));
+
+        for (Enemigo em : enemigos) {
+            Thread hilo = new Thread(em);
+            hilo.start();
+        }
+
     }
 
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void iniciarEnemigos() {
+
+        for (Enemigo em : enemigos) {
+            Thread hilo = new Thread(em);
+            hilo.start();
+        }
+    }
+
+    public void dibujaEnemigos(Enemigo enemigo, Graphics g) {
         int cont = 0;
         this.dibujarTanqueJugadorSprite(g, jugador.getX(), jugador.getY(), jugador.getDirection(), new int[]{17, 24, 26, 19});
 
         this.dibujarObstaculo(g, 250, 200);
-        this.dibujarBorde1(g, 0, 0);
-        this.dibujarBorde2(g, 0, 530);
-        this.dibujarBorde3(g, 0, 0);
-        this.dibujarBorde4(g, 575, 0);
+        // this.dibujarBorde1(g, 0, 0);
+        // this.dibujarBorde2(g, 0, 530);
+        // this.dibujarBorde3(g, 0, 0);
+        // this.dibujarBorde4(g, 575, 0);
 
-        this.dibujarEnemigo(g, enemigo.getX(), enemigo.getY(), enemigo.getDirection(), new int[]{10, 8, 1, 3});
-
+        // this.dibujarEnemigo(g, enemigo.getX(), enemigo.getY(), enemigo.getDirection(), new int[]{10, 8, 1, 3});
         //tanque con roca--
         Rectangle ima1 = colisionDetectionObs.crearRectangle(obstaculo, 250, 200);
         colisionDetectionObs.setImagen1Bounds(ima1);
@@ -184,7 +211,8 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
 ///////////////////////////////////////////
 //////////////////////////////////////////////////
 ////////////////enemigo con roca---///////////////////////////////////////////////////
-        Rectangle ima = colisionDetectionObs2.crearRectangle(obstaculo, 250, 200);
+        //Rectangle ima = colisionDetectionObs2.crearRectangle(obstaculo, 250, 200);
+        Rectangle ima = new Rectangle(250, 200, obstaculo.getWidth(), obstaculo.getHeight());
         colisionDetectionObs2.setImagen1Bounds(ima);
         g.setColor(Color.red);
         g.drawRect(ima.x, ima.y, ima.width, ima.height);
@@ -268,6 +296,26 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
             obstacle = false;
             obstacle2 = false;
         }
+    }
+
+    public void paintEnemy(Graphics g, Enemigo em) {
+
+        // g.drawRect(em.getReg().x, em.getReg().y, em.getReg().width, em.getReg().height);
+        // this.dibujarEnemigo(g, enemigo.getX(), enemigo.getY(), enemigo.getDirection(), new int[]{10, 8, 1, 3});
+        this.dibujarEnemigo(g, em.getX(), em.getY(), em.getDirection(), new int[]{10, 8, 1, 3}, em);
+    }
+
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        for (Enemigo em : enemigos) {
+            paintEnemy(g, em);
+            g.setColor(Color.ORANGE);
+            g.drawRect(0, 0, 580, 535);
+        }
+    }
+
+    public void dibujar() {
 
     }
 
@@ -320,7 +368,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
         g.drawImage(obstaculo, x, y, this);
     }
 
-    public void dibujarEnemigo(Graphics g, int x, int y, String direction, int[] pos) {
+    public void dibujarEnemigo(Graphics g, int x, int y, String direction, int[] pos, Enemigo em) {
         BufferedImage sprite = null;
         switch (direction) {
             case "Norte":
@@ -328,8 +376,8 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     sprite = spriteSheet.getSprite(pos[0]);
                     g.drawImage(sprite, x, y, this);
                 } else {
-                    enemigo.setDirection("Sur");
-                    enemigo.setY(y = y - 15);
+                    em.setDirection("Sur");
+                    em.setY(y = y - 15);
                     sprite = spriteSheet.getSprite(pos[2]);
                     g.drawImage(sprite, x, y, this);
 
@@ -341,8 +389,8 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     sprite = spriteSheet.getSprite(pos[1]);
                     g.drawImage(sprite, x, y, this);
                 } else {
-                    enemigo.setDirection("Este");
-                    enemigo.setX(x = x + 15);
+                    em.setDirection("Este");
+                    em.setX(x = x + 15);
                     sprite = spriteSheet.getSprite(pos[3]);
                     g.drawImage(sprite, x, y, this);
 
@@ -354,8 +402,8 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     sprite = spriteSheet.getSprite(pos[2]);
                     g.drawImage(sprite, x, y, this);
                 } else {
-                    enemigo.setDirection("Norte");
-                    enemigo.setY(y = y + 15);
+                    em.setDirection("Norte");
+                    em.setY(y = y + 15);
                     sprite = spriteSheet.getSprite(pos[1]);
                     g.drawImage(sprite, x, y, this);
 
@@ -367,15 +415,22 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
                     sprite = spriteSheet.getSprite(pos[3]);
                     g.drawImage(sprite, x, y, this);
                 } else {
-                    enemigo.setDirection("Oeste");
-                    enemigo.setX(x = x - 15);
+                    em.setDirection("Oeste");
+                    em.setX(x = x - 15);
                     sprite = spriteSheet.getSprite(pos[1]);
                     g.drawImage(sprite, x, y, this);
-
                 }
                 break;
         }
-        currentEnemigoSprite = sprite;
+
+        em.getReg().x = x;
+        em.getReg().y = y;
+        em.getReg().width = 32;
+        em.getReg().width = 32;
+        // currentEnemigoSprite = sprite;
+
+        g.setColor(Color.GREEN);
+        g.drawRect(em.getReg().x, em.getReg().y, em.getReg().width, em.getReg().height);
 
     }
 
@@ -430,17 +485,13 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         while (true) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
             this.repaint();
-//			}
         }
     }
 
