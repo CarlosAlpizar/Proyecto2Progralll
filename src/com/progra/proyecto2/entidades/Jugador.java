@@ -6,16 +6,17 @@ import java.util.Vector;
 public class Jugador extends Tanque {
 
     private Vector<Bala> balasJugador = new Vector<Bala>();
-    Bala balaJugador = null;
+    Bala balaJugador = new Bala(x, y, direccion);
+
+    private int xb = balaJugador.getBulletX();
+    private int yb = balaJugador.getBulletY();
 
     public Jugador(int x, int y) {
         super(x, y);
-
     }
 
     public void moveUp() {
         y -= speed;
-
     }
 
     public void moveLeft() {
@@ -30,46 +31,6 @@ public class Jugador extends Tanque {
         x += speed;
     }
 
-    public void shoot(int x, int y, String direccion) {
-
-        balaJugador = new Bala(x, y, direccion);
-        balasJugador.add(balaJugador);
-
-        switch (direccion) {
-            case "Norte":
-                y = y + 5;
-                this.setX(x);
-                this.setY(y);
-
-                break;
-
-            case "Oeste":
-
-                x = x - 5;
-
-                this.setX(x);
-                this.setY(y);
-
-                break;
-
-            case "Sur":
-
-                y = y + -5;
-
-                this.setX(x);
-                this.setY(y);
-                break;
-
-            case "Este":
-
-                x = x + 5;
-                this.setX(x);
-                this.setY(y);
-
-                break;
-        }
-    }
-
     public Vector<Bala> getBalasJugador() {
         return balasJugador;
     }
@@ -79,4 +40,46 @@ public class Jugador extends Tanque {
         return balaJugador;
     }
 
+    public void disparo() {
+        System.out.println("piuu piuu");
+        switch (direccion) {
+            case "Norte":
+
+                yb = yb + 5;
+                for (int i = 0; i < 100; i++) {
+                    balaJugador.setBulletX(xb);
+                    balaJugador.setBulletY(yb);
+                }
+                break;
+
+            case "Oeste":
+
+                xb = xb - 5;
+                for (int i = 0; i < 100; i++) {
+                    balaJugador.setBulletX(xb);
+                    balaJugador.setBulletY(yb);
+                }
+                break;
+
+            case "Sur":
+
+                yb = yb - 5;
+                for (int i = 0; i < 100; i++) {
+                    balaJugador.setBulletX(xb);
+                    balaJugador.setBulletY(yb);
+                }
+                break;
+
+            case "Este":
+
+                xb = xb + 5;
+                for (int i = 0; i < 100; i++) {
+                    balaJugador.setBulletX(xb);
+                    balaJugador.setBulletY(yb);
+                }
+                break;
+        }
+        Thread hilo = new Thread(balaJugador);
+        hilo.start();
+    }
 }

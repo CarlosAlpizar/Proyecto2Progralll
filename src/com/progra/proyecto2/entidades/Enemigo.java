@@ -110,7 +110,6 @@ public class Enemigo extends Tanque implements Runnable {
         return false;
     }
 
-//0, 0, 580, 535
     public void mover() {
 
         switch (direccion) {
@@ -134,7 +133,7 @@ public class Enemigo extends Tanque implements Runnable {
 
             case "Sur":
                 if (pasos != 0) {
-                    y = y + -5;
+                    y = y - 5;
                     pasos--;
                     this.setX(x);
                     this.setY(y);

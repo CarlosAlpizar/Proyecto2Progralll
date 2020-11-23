@@ -2,8 +2,16 @@ package com.progra.proyecto2.entidades;
 
 public class Bala implements Runnable {
 
-    int bulletX;
-    int bulletY;
+    public void setBulletX(int bulletX) {
+        this.bulletX = bulletX;
+    }
+
+    public void setBulletY(int bulletY) {
+        this.bulletY = bulletY;
+    }
+
+    private int bulletX;
+    private int bulletY;
     String direccionBala;
     int velocidadBala = 4;
     boolean isLive = true;
@@ -38,10 +46,48 @@ public class Bala implements Runnable {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             }
-
+            shoot(direccionBala);
         }
     }
+
+    public void shoot(String direccion) {
+        switch (direccion) {
+            case "Norte":
+
+                bulletY = bulletY + 5;
+
+                this.setBulletX(bulletX);
+                this.setBulletY(bulletY);
+
+                break;
+
+            case "Oeste":
+
+                bulletX = bulletX - 5;
+
+                this.setBulletX(bulletX);
+                this.setBulletY(bulletY);
+
+                break;
+
+            case "Sur":
+
+                bulletY = bulletY + -5;
+
+                this.setBulletX(bulletX);
+                this.setBulletY(bulletY);
+
+                break;
+
+            case "Este":
+                bulletX = bulletX + 5;
+                this.setBulletX(bulletX);
+                this.setBulletY(bulletY);
+                break;
+        }
+    }
+
 }

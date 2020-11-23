@@ -104,9 +104,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
 
             this.setImage("/com/progra/proyecto2/resources/mapa.jpg");
 
-            shoot = new Bala(100, 100, "Norte");
-            Thread hilob = new Thread(shoot);
-            hilob.start();
+            shoot = new Bala(jugador.getX(), jugador.getY(), jugador.getDirection());
 
             enemigo = new Enemigo(210, 200, spriteSheet);
             Thread hilo = new Thread(enemigo);
@@ -152,48 +150,49 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
 
     public void paint(Graphics g) {
         super.paint(g);
-        this.dibujarBala(g, shoot.getBulletX(), shoot.getBulletY());
+
         this.dibujarTanqueJugadorSprite(g, jugador.getX(), jugador.getY(), jugador.getDirection(), new int[]{17, 24, 26, 19});
 
         for (Enemigo em : enemigos) {
             paintEnemy(g, em);
-            g.setColor(Color.ORANGE);
             g.drawRect(0, 0, 580, 535);
         }
 
+        this.dibujarBala(g, jugador.getX(), jugador.getY());
+
         Rectangle imaborde1 = colisionDetection1.crearRectangle(borde1, 0, 0);
         colisionDetection1.setImagen1Bounds(imaborde1);
-        g.setColor(null);
+
         g.drawRect(imaborde1.x, imaborde1.y, imaborde1.width, imaborde1.height);
         Rectangle imaSpr = colisionDetection1.crearRectangle(currentPlayerSprite, jugador.getX(), jugador.getY());
         colisionDetection1.setImagen2Bounds(imaSpr);
-        g.setColor(null);
+
         g.drawRect(imaSpr.x, imaSpr.y, imaSpr.width, imaSpr.height);
         Rectangle imaborde2 = colisionDetection2.crearRectangle(borde2, 0, 530);
         colisionDetection2.setImagen1Bounds(imaborde2);
-        g.setColor(null);
+
         g.drawRect(imaborde2.x, imaborde2.y, imaborde2.width, imaborde2.height);
         Rectangle imaSpr2 = colisionDetection2.crearRectangle(currentPlayerSprite, jugador.getX(), jugador.getY());
         colisionDetection2.setImagen2Bounds(imaSpr2);
-        g.setColor(null);
+
         g.drawRect(imaSpr2.x, imaSpr2.y, imaSpr2.width, imaSpr2.height);
 
         Rectangle imaborde3 = colisionDetection3.crearRectangle(borde3, 0, 0);
         colisionDetection3.setImagen1Bounds(imaborde3);
-        g.setColor(null);
+
         g.drawRect(imaborde3.x, imaborde3.y, imaborde3.width, imaborde3.height);
         Rectangle imaSpr3 = colisionDetection3.crearRectangle(currentPlayerSprite, jugador.getX(), jugador.getY());
         colisionDetection3.setImagen2Bounds(imaSpr3);
-        g.setColor(null);
+
         g.drawRect(imaSpr3.x, imaSpr3.y, imaSpr3.width, imaSpr3.height);
         Rectangle imaborde4 = colisionDetection4.crearRectangle(borde4, 575, 0);
         colisionDetection4.setImagen1Bounds(imaborde4);
-        g.setColor(null);
+
         g.drawRect(imaborde4.x, imaborde4.y, imaborde4.width, imaborde4.height);
 
         Rectangle imaSpr4 = colisionDetection4.crearRectangle(currentPlayerSprite, jugador.getX(), jugador.getY());
         colisionDetection4.setImagen2Bounds(imaSpr4);
-        g.setColor(null);
+
         g.drawRect(imaSpr4.x, imaSpr4.y, imaSpr4.width, imaSpr4.height);
 
         if (colisionDetection1.detecCollision() != null) {
@@ -366,7 +365,7 @@ public class JuegoPanel extends JPanel implements KeyListener, Runnable {
 
         }
         if (k.getKeyCode() == KeyEvent.VK_SPACE) {
-            jugador.shoot(jugador.getX(), jugador.getY(), this.jugador.getDirection());
+            jugador.disparo();
         }
     }
 

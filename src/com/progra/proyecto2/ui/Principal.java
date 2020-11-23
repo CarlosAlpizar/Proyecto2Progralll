@@ -30,9 +30,11 @@ public class Principal implements ActionListener {
     JuegoPanel juegoPanel = new JuegoPanel("New");
     PanelInicio startPanel = null;
     Ranking ranking = new Ranking("Ranking");
+    Controles controles = new Controles();
     JMenu jm1;
     JMenuItem jmt1;
     JMenuItem jmt2;
+    JMenuItem jmt3;
     JMenuBar jmb;
     private String user;
 
@@ -45,21 +47,25 @@ public class Principal implements ActionListener {
         jm1 = new JMenu("Juego");
         jmt1 = new JMenuItem("Nuevo juego");
         jmt2 = new JMenuItem("Ranking");
+        jmt3 = new JMenuItem("Controles");
 
         jmt1.setActionCommand("Nuevo");
         jmt2.setActionCommand("Ranking");
+        jmt3.setActionCommand("Controles");
+
         jmt1.addActionListener(this);
         jmt2.addActionListener(this);
+        jmt3.addActionListener(this);
 
         jm1.add(jmt1);
         jm1.add(jmt2);
+        jm1.add(jmt3);
         jm1.addSeparator();
 
         jmb.add(jm1);
 
         jf.setJMenuBar(jmb);
 
-        //crear Panel de inicio
         startPanel = new PanelInicio();
         Thread startPanelThread = new Thread(startPanel);
 
@@ -94,6 +100,7 @@ public class Principal implements ActionListener {
 
             jf.remove(startPanel);
             jf.remove(ranking);
+            jf.remove(controles);
             jf.add(juegoPanel);
             jf.addKeyListener(juegoPanel);
             jf.setVisible(true);
@@ -105,9 +112,23 @@ public class Principal implements ActionListener {
 
             jf.remove(startPanel);
             jf.remove(juegoPanel);
+            jf.remove(controles);
             jf.add(ranking);
             jf.addKeyListener(ranking);
             ranking.GenerarTabla();
+            jf.setVisible(true);
+
+        } else if (a.getActionCommand().equals("Controles")) {
+
+            Thread controlpanel = new Thread(controles);
+            controlpanel.start();
+
+            jf.remove(startPanel);
+            jf.remove(juegoPanel);
+            jf.remove(ranking);
+
+            jf.add(controles);
+            jf.addKeyListener(controles);
             jf.setVisible(true);
 
         }

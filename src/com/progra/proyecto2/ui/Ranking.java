@@ -140,21 +140,3 @@ public class Ranking extends javax.swing.JPanel implements Runnable, KeyListener
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
-/*
-
-
-        for (String categoria : msjfinal) {
-            String[] info = categoria.split("_");
-            Object[] obj = new Object[2];
-
-            obj[0] = info[0];
-            obj[1] = info[1];
-            Tcategoria.addRow(obj);
-
-
-        }
-        TablaCat.setModel(Tcategoria); tabla
-
-
-
-*/
