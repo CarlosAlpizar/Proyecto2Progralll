@@ -18,10 +18,12 @@ public class Principal implements ActionListener {
 
     JFrame jf;
     PanelInicio sp = null;
-    JuegoPanel juegoPanel = null;
+    JuegoPanel juegoPanel = new JuegoPanel("New");
     PanelInicio startPanel = null;
+    Ranking ranking = new Ranking("Ranking");
     JMenu jm1;
     JMenuItem jmt1;
+    JMenuItem jmt2;
     JMenuBar jmb;
 
     public Principal() {
@@ -29,14 +31,22 @@ public class Principal implements ActionListener {
         jf = new JFrame("Tank War");
 
         jmb = new JMenuBar();
+
         jm1 = new JMenu("Juego");
         jmt1 = new JMenuItem("Nuevo juego");
-        jmt1.setActionCommand("Nuevo");//vamos a utilizarlo para hacer la diferentes funciones del menu
+        jmt2 = new JMenuItem("Ranking");
+
+        jmt1.setActionCommand("Nuevo");
+        jmt2.setActionCommand("Ranking");
         jmt1.addActionListener(this);
+        jmt2.addActionListener(this);
 
         jm1.add(jmt1);
+        jm1.add(jmt2);
         jm1.addSeparator();
+
         jmb.add(jm1);
+
         jf.setJMenuBar(jmb);
 
         //crear Panel de inicio
@@ -67,15 +77,24 @@ public class Principal implements ActionListener {
 
         if (a.getActionCommand().equals("Nuevo")) {
 
-            juegoPanel = new JuegoPanel("New");
-
             Thread juegoPanelThread = new Thread(juegoPanel);
             juegoPanelThread.start();
 
             jf.remove(startPanel);
+            jf.remove(ranking);
             jf.add(juegoPanel);
             jf.addKeyListener(juegoPanel);
+            jf.setVisible(true);
 
+        } else if (a.getActionCommand().equals("Ranking")) {
+
+            Thread rankingpanel = new Thread(ranking);
+            rankingpanel.start();
+
+            jf.remove(startPanel);
+            jf.remove(juegoPanel);
+            jf.add(ranking);
+            jf.addKeyListener(ranking);
             jf.setVisible(true);
 
         }
